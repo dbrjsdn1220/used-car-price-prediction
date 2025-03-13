@@ -16,7 +16,6 @@ for i in range(len(data)-1):
 
 df_car = pd.DataFrame(columns=car_columns)
 df_car = df_car.astype(float)
-# -----------------------------------------------
 
 # 분석할 차량 상세 페이지 url 크롤링
 # -----------------------------------------------
@@ -32,6 +31,7 @@ car_urls = ["https://www.bobaedream.co.kr/mycar/mycar_list.php?gubun=K&maker_no=
             "https://www.bobaedream.co.kr/mycar/mycar_list.php?gubun=K&maker_no=3&group_no=45&page=%d"]
 cars = []
 
+print("시작!")
 for car_type in range(len(car_urls)):
     detail_urls = []
     for i in range(1, 20):
@@ -49,12 +49,11 @@ for car_type in range(len(car_urls)):
         for j in range(len(data)):
             href = data[j].a['href']
             detail_urls += ["https://www.bobaedream.co.kr" + href]
-    # -----------------------------------------------
 
     # 차량 상세 페이지로 들어가 상세 정보 크롤링
     # -----------------------------------------------
     for detail_url in detail_urls:
-        print("작동 ")
+        print("|", end="")
         response = requests.get(detail_url)
         soup = BeautifulSoup(response.text, "html.parser")
         options = soup.find_all("span", class_="radioBox")
@@ -113,14 +112,15 @@ for car_type in range(len(car_urls)):
             except KeyError:
                 car += [0]
         cars.append(car)
-        print(".", end="")
-    # -----------------------------------------------
+    print('')
 
 # cars 출력 및 csv 파일로 저장
 for i in range(len(cars)):
     print(i, ": ", cars[i])
     df_car.loc[len(df_car)] = cars[i]
 
-# csv 파일로 저장
+# 기존 파일에 데이터를 추가해서 저장
+# -----------------------------------------------
+df_car.to_csv('cars.csv', mode='a', header=False, index=False, encoding='cp949')
+
 print("끝!")
-df_car.to_csv('cars.csv', index=False, encoding='cp949')

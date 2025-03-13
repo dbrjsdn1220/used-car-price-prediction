@@ -48,7 +48,7 @@ X = np.array(df_car.drop(['가격(단위: 만)'], axis=1, inplace=False))
 Y = np.array(df_car['가격(단위: 만)'])
 
 # 데이터 양이 적으므로 k겹 교차검증
-kf = KFold(n_splits=5, shuffle=True, random_state=0)
+kf = KFold(n_splits=5, shuffle=True, random_state=1)
 list_rmse = []
 all_Y_pred = []
 all_Y_test = []
